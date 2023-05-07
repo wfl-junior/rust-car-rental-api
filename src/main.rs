@@ -1,7 +1,8 @@
 mod controllers;
 
 use actix_web::{middleware::Logger, web, App, HttpServer};
-use dotenv::dotenv;
+use dotenvy::dotenv;
+use dotenvy_macro::dotenv;
 use serde::Serialize;
 use sqlx::postgres::{PgPool, PgPoolOptions};
 
@@ -18,13 +19,11 @@ struct ErrorResponse {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
   dotenv().ok();
-
-  let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-
+  let database_url = dotenv!("DATABASE_URL");
   let app_state = AppState {
     pool: PgPoolOptions::new()
       .max_connections(5)
-      .connect(&database_url)
+      .connect(database_url)
       .await
       .unwrap(),
   };
