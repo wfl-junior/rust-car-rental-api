@@ -13,8 +13,8 @@ async fn main() {
   sqlx::query(
     "CREATE TABLE IF NOT EXISTS brands (
       id uuid PRIMARY KEY,
-      created_at timestamptz NOT NULL,
-      updated_at timestamptz NOT NULL,
+      created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
       name varchar(255) NOT NULL UNIQUE
     )",
   )

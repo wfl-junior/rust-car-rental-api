@@ -1,6 +1,7 @@
-use super::{get_by_id, Brand, BrandInput};
+use super::{Brand, BrandInput};
 use crate::{AppState, ErrorResponse};
 use actix_web::{put, web, HttpResponse, Responder};
+use chrono::Utc;
 use serde::Serialize;
 use uuid::Uuid;
 
@@ -15,13 +16,30 @@ async fn update_brand_by_id(
   brand_id: web::Path<Uuid>,
   input_json: web::Json<BrandInput>,
 ) -> impl Responder {
-  let id = brand_id.into_inner();
-  let result = get_by_id(&app_state.pool, id).await;
+  let input = input_json.into_inner();
+  let result = sqlx::query_as!(
+    Brand,
+    "UPDATE brands SET name = $2, updated_at = $3 WHERE id = $1 RETURNING *",
+    brand_id.into_inner(),
+    input.name,
+    Utc::now(),
+  )
+  .fetch_optional(&app_state.pool)
+  .await;
 
   match result {
     Err(error) => {
+      let error_message = error.to_string();
+      if error_message.contains("unique constraint") {
+        let response = ErrorResponse {
+          message: format!("Brand {} already exists", input.name),
+        };
+
+        return HttpResponse::Conflict().json(response);
+      }
+
       let response = ErrorResponse {
-        message: error.to_string(),
+        message: error_message,
       };
 
       return HttpResponse::InternalServerError().json(response);
@@ -33,39 +51,10 @@ async fn update_brand_by_id(
 
       return HttpResponse::NotFound().json(response);
     }
-    Ok(Some(mut brand)) => {
-      let input = input_json.into_inner();
-      brand.name = input.name;
+    Ok(Some(brand)) => {
+      let response = UpdateBrandByIdResponse { brand };
 
-      let result = sqlx::query("UPDATE brands SET name = $2 WHERE id = $1")
-        .bind(id)
-        .bind(&brand.name)
-        .execute(&app_state.pool)
-        .await;
-
-      match result {
-        Err(error) => {
-          let error_message = error.to_string();
-          if error_message.contains("unique constraint") {
-            let response = ErrorResponse {
-              message: format!("Brand {} already exists", brand.name),
-            };
-
-            return HttpResponse::Conflict().json(response);
-          }
-
-          let response = ErrorResponse {
-            message: error_message,
-          };
-
-          return HttpResponse::InternalServerError().json(response);
-        }
-        Ok(_) => {
-          let response = UpdateBrandByIdResponse { brand };
-
-          return HttpResponse::Ok().json(response);
-        }
-      }
+      return HttpResponse::Ok().json(response);
     }
   }
 }

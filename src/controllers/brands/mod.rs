@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
 use uuid::Uuid;
 
-#[derive(sqlx::FromRow, Serialize)]
+#[derive(Serialize)]
 struct Brand {
   id: Uuid,
   name: String,
