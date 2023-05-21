@@ -1,5 +1,5 @@
-mod access_token;
 mod login;
+mod me;
 mod register;
 
 use actix_web::web;
@@ -40,5 +40,8 @@ struct LoginInput {
 }
 
 pub fn router(config: &mut web::ServiceConfig) {
-  config.service(register::register).service(login::login);
+  config
+    .service(register::register)
+    .service(login::login)
+    .service(me::me);
 }

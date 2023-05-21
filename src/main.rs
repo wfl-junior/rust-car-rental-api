@@ -1,4 +1,6 @@
 mod controllers;
+mod middleware;
+mod utils;
 
 use actix_web::{middleware::Logger, web, App, HttpServer};
 use dotenvy::dotenv;

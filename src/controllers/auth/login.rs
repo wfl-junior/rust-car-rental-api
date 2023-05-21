@@ -1,7 +1,9 @@
-use super::{
-  access_token::generate_access_token, LoginInput, User, UserWithPassword,
+use super::{LoginInput, User, UserWithPassword};
+use crate::{
+  utils::access_token::generate_access_token,
+  AppState,
+  ErrorResponse,
 };
-use crate::{AppState, ErrorResponse};
 use actix_web::{post, web, HttpResponse, Responder};
 use bcrypt::verify;
 use serde::Serialize;

@@ -1,5 +1,9 @@
-use super::{access_token::generate_access_token, RegisterInput, User};
-use crate::{AppState, ErrorResponse};
+use super::{RegisterInput, User};
+use crate::{
+  utils::access_token::generate_access_token,
+  AppState,
+  ErrorResponse,
+};
 use actix_web::{post, web, HttpResponse, Responder};
 use bcrypt::hash;
 use serde::Serialize;
