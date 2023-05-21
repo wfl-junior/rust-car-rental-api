@@ -43,7 +43,7 @@ fn handle_generate_access_token(
         },
       };
 
-      return HttpResponse::Created().json(response);
+      return HttpResponse::Ok().json(response);
     }
   }
 }

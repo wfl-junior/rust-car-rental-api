@@ -75,7 +75,7 @@ async fn handle_create_rental(
     }
     Ok(rental) => {
       let response = CreateRentalResponse { rental };
-      return HttpResponse::Ok().json(response);
+      return HttpResponse::Created().json(response);
     }
   };
 }

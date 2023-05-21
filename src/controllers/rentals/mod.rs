@@ -1,3 +1,4 @@
+mod cancel;
 mod store;
 
 use actix_web::web;
@@ -18,5 +19,7 @@ pub struct Rental {
 }
 
 pub fn router(config: &mut web::ServiceConfig) {
-  config.service(store::create_rental);
+  config
+    .service(store::create_rental)
+    .service(cancel::cancel_rental);
 }
