@@ -3,6 +3,28 @@ use crate::{AppState, ErrorResponse};
 use actix_web::{get, web, HttpResponse, Responder};
 use serde::Serialize;
 
+fn append_car_to_brand(
+  query: BrandWithOptionCarQuery,
+  brand: &mut BrandWithCars,
+) -> Result<(), ()> {
+  let car = Car {
+    id: query.car_id.ok_or(())?,
+    created_at: query.car_created_at.ok_or(())?,
+    updated_at: query.car_updated_at.ok_or(())?,
+    brand_id: query.id,
+    model: query.car_model.as_ref().ok_or(())?.to_string(),
+    horse_power: query.car_horse_power.ok_or(())?,
+    torque_in_lb: query.car_torque_in_lb.ok_or(())?,
+    top_speed_in_km: query.car_top_speed_in_km.ok_or(())?,
+    acceleration_speed_in_km: query.car_acceleration_speed_in_km.ok_or(())?,
+    weight_in_kg: query.car_weight_in_kg.ok_or(())?,
+    rental_price_daily_in_usd: query.car_rental_price_daily_in_usd.ok_or(())?,
+  };
+
+  brand.cars.push(car);
+  return Ok(());
+}
+
 #[derive(Serialize)]
 struct GetAllBrandsResponse {
   brands: Vec<BrandWithCars>,
@@ -58,45 +80,7 @@ async fn get_all_brands(app_state: web::Data<AppState>) -> impl Responder {
           }
         };
 
-        let car = query.car_id.and_then(|car_id| {
-          query.car_created_at.and_then(|created_at| {
-            query.car_updated_at.and_then(|updated_at| {
-              query.car_model.as_ref().and_then(|model| {
-                query.car_horse_power.and_then(|horse_power| {
-                  query.car_torque_in_lb.and_then(|torque_in_lb| {
-                    query.car_top_speed_in_km.and_then(|top_speed_in_km| {
-                      query
-                        .car_acceleration_speed_in_km
-                        .and_then(|acceleration_speed_in_km| {
-                          query.car_weight_in_kg.and_then(|weight_in_kg| {
-                            query
-                              .car_rental_price_daily_in_usd
-                              .map(|rental_price_daily_in_usd| Car {
-                                id: car_id,
-                                created_at,
-                                updated_at,
-                                brand_id: query.id,
-                                model: model.to_string(),
-                                horse_power,
-                                torque_in_lb,
-                                top_speed_in_km,
-                                acceleration_speed_in_km,
-                                weight_in_kg,
-                                rental_price_daily_in_usd,
-                              })
-                          })
-                        })
-                    })
-                  })
-                })
-              })
-            })
-          })
-        });
-
-        if let Some(car) = car {
-          brand.cars.push(car);
-        }
+        append_car_to_brand(query, brand).unwrap_or(());
       }
 
       let response = GetAllBrandsResponse {
