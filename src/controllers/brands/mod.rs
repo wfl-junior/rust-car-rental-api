@@ -18,7 +18,7 @@ pub struct Brand {
   pub name: String,
 }
 
-#[derive(Serialize, Clone)]
+#[derive(Clone)]
 struct BrandWithCarQuery {
   id: Uuid,
   created_at: DateTime<Utc>,
@@ -37,7 +37,7 @@ struct BrandWithCarQuery {
   car_rental_price_daily_in_usd: f64,
 }
 
-#[derive(Serialize, Clone)]
+#[derive(Clone)]
 struct BrandWithOptionCarQuery {
   id: Uuid,
   created_at: DateTime<Utc>,

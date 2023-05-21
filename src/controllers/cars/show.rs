@@ -22,7 +22,7 @@ async fn get_car_by_id(
         brands.created_at AS brand_created_at,
         brands.updated_at AS brand_updated_at,
         brands.name AS brand_name
-      FROM cars INNER JOIN brands ON cars.brand_id = brands.id
+      FROM cars INNER JOIN brands ON brands.id = cars.brand_id
       WHERE cars.id = $1
       LIMIT 1;
     ",

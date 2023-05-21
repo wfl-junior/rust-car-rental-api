@@ -18,7 +18,7 @@ async fn get_all_cars(app_state: web::Data<AppState>) -> impl Responder {
         brands.created_at AS brand_created_at,
         brands.updated_at AS brand_updated_at,
         brands.name AS brand_name
-      FROM cars INNER JOIN brands ON cars.brand_id = brands.id
+      FROM cars INNER JOIN brands ON brands.id = cars.brand_id
       ORDER BY cars.created_at ASC;
     "
   )

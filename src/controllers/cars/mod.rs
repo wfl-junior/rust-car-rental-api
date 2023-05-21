@@ -25,7 +25,6 @@ pub struct Car {
   pub rental_price_daily_in_usd: f64,
 }
 
-#[derive(Serialize)]
 struct CarWithBrandQuery {
   id: Uuid,
   created_at: DateTime<Utc>,
@@ -45,20 +44,20 @@ struct CarWithBrandQuery {
 }
 
 #[derive(Serialize)]
-struct CarWithBrand {
-  id: Uuid,
-  created_at: DateTime<Utc>,
-  updated_at: DateTime<Utc>,
-  brand_id: Uuid,
-  model: String,
-  horse_power: i32,
-  torque_in_lb: f32,
-  top_speed_in_km: i32,
-  acceleration_speed_in_km: f32,
-  weight_in_kg: i32,
-  rental_price_daily_in_usd: f64,
+pub struct CarWithBrand {
+  pub id: Uuid,
+  pub created_at: DateTime<Utc>,
+  pub updated_at: DateTime<Utc>,
+  pub brand_id: Uuid,
+  pub model: String,
+  pub horse_power: i32,
+  pub torque_in_lb: f32,
+  pub top_speed_in_km: i32,
+  pub acceleration_speed_in_km: f32,
+  pub weight_in_kg: i32,
+  pub rental_price_daily_in_usd: f64,
 
-  brand: Brand,
+  pub brand: Brand,
 }
 
 impl From<CarWithBrandQuery> for CarWithBrand {
