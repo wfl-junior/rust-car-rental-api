@@ -46,4 +46,18 @@ async fn main() {
   .execute(&mut connection)
   .await
   .unwrap();
+
+  sqlx::query(
+    "CREATE TABLE IF NOT EXISTS users (
+      id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+      created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      name varchar(255) NOT NULL,
+      email varchar(255) NOT NULL UNIQUE,
+      password varchar(255) NOT NULL
+    )",
+  )
+  .execute(&mut connection)
+  .await
+  .unwrap();
 }

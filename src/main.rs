@@ -39,6 +39,7 @@ async fn main() -> std::io::Result<()> {
       .app_data(web::Data::new(app_state.clone()))
       .configure(controllers::brands::router)
       .configure(controllers::cars::router)
+      .configure(controllers::auth::router)
   })
   .bind(("127.0.0.1", port))?
   .run()

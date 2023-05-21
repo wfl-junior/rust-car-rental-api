@@ -10,7 +10,10 @@ struct GetCarByIdResponse {
 }
 
 #[get("/cars/{id}")]
-async fn get_car_by_id(app_state: web::Data<AppState>, car_id: web::Path<Uuid>) -> impl Responder {
+async fn get_car_by_id(
+  app_state: web::Data<AppState>,
+  car_id: web::Path<Uuid>,
+) -> impl Responder {
   let result = sqlx::query_as!(
     CarWithBrandQuery,
     "
