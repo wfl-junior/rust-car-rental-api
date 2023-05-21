@@ -10,7 +10,7 @@ struct MeResponse {
 }
 
 #[get("/auth/me")]
-async fn me(
+async fn get_me(
   request: HttpRequest,
   app_state: web::Data<AppState>,
   _: AuthMiddleware,

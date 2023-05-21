@@ -1,4 +1,4 @@
-use super::{LoginInput, User, UserWithPassword};
+use super::{User, UserWithPassword};
 use crate::{
   utils::access_token::generate_access_token,
   AppState,
@@ -6,7 +6,13 @@ use crate::{
 };
 use actix_web::{post, web, HttpResponse, Responder};
 use bcrypt::verify;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
+
+#[derive(Deserialize)]
+struct LoginInput {
+  email: String,
+  password: String,
+}
 
 #[derive(Serialize)]
 struct LoginResponse {

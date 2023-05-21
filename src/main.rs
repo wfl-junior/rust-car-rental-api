@@ -42,6 +42,7 @@ async fn main() -> std::io::Result<()> {
       .configure(controllers::brands::router)
       .configure(controllers::cars::router)
       .configure(controllers::auth::router)
+      .configure(controllers::rentals::router)
   })
   .bind(("127.0.0.1", port))?
   .run()

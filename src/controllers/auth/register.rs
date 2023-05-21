@@ -1,4 +1,4 @@
-use super::{RegisterInput, User};
+use super::User;
 use crate::{
   utils::access_token::generate_access_token,
   AppState,
@@ -6,7 +6,14 @@ use crate::{
 };
 use actix_web::{post, web, HttpResponse, Responder};
 use bcrypt::hash;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
+
+#[derive(Deserialize)]
+struct RegisterInput {
+  name: String,
+  email: String,
+  password: String,
+}
 
 #[derive(Serialize)]
 struct RegisterResponse {
@@ -50,11 +57,10 @@ async fn register(
   let result = sqlx::query_as!(
     User,
     "
-      INSERT INTO users
-        (name, email, password)
-      VALUES
-        ($1, $2, $3)
-      RETURNING id, created_at, updated_at, name, email;",
+      INSERT INTO users (name, email, password)
+      VALUES ($1, $2, $3)
+      RETURNING id, created_at, updated_at, name, email;
+    ",
     input.name,
     input.email,
     hashed_password.unwrap()

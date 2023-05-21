@@ -1,7 +1,6 @@
 use dotenvy::dotenv;
 use dotenvy_macro::dotenv;
-use sqlx::postgres::PgConnection;
-use sqlx::Connection;
+use sqlx::{postgres::PgConnection, Connection};
 
 #[actix_web::main]
 async fn main() {
@@ -55,6 +54,25 @@ async fn main() {
       name varchar(255) NOT NULL,
       email varchar(255) NOT NULL UNIQUE,
       password varchar(255) NOT NULL
+    )",
+  )
+  .execute(&mut connection)
+  .await
+  .unwrap();
+
+  sqlx::query(
+    "CREATE TABLE IF NOT EXISTS rentals (
+      id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+      created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      user_id uuid NOT NULL,
+      car_id uuid NOT NULL,
+      starts_at timestamptz NOT NULL,
+      ends_at timestamptz NOT NULL,
+      canceled_at timestamptz,
+
+      CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id),
+      CONSTRAINT fk_car FOREIGN KEY(car_id) REFERENCES cars(id)
     )",
   )
   .execute(&mut connection)
