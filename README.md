@@ -85,13 +85,13 @@ All application routes
 ### Rentals
 
 - `GET /rentals` used to get the list of all rentals
-  ###### Filters (query params) (TODO):
+  ###### Filters (query params):
   - car_id - if specified it will return only the rentals for this car_id `[optional]`
   - starts_at - if specified it will return only the rentals that have a starts_at greater than or equal to the specified date `[optional]`
   - ends_at - if specified it will return only the rentals that have an ends_at lesser than or equal to the specified date `[optional]`
     <br />
 - `GET /rentals/mines` used to get the list of all rentals from logged user
-  ###### Filters (query params) (TODO):
+  ###### Filters (query params):
   - car_id - if specified it will return only the rentals for this car_id `[optional]`
   - starts_at - if specified it will return only the rentals that have a starts_at greater than or equal to the specified date `[optional]`
   - ends_at - if specified it will return only the rentals that have an ends_at lesser than or equal to the specified date `[optional]`

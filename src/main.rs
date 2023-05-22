@@ -1,5 +1,6 @@
 mod controllers;
 mod middleware;
+mod repositories;
 mod utils;
 
 use actix_web::{middleware::Logger, web, App, HttpServer};
@@ -9,8 +10,8 @@ use serde::Serialize;
 use sqlx::postgres::{PgPool, PgPoolOptions};
 
 #[derive(Clone)]
-struct AppState {
-  pool: PgPool,
+pub struct AppState {
+  pub pool: PgPool,
 }
 
 #[derive(Serialize)]

@@ -6,7 +6,8 @@ mod store;
 use super::{brands::Brand, cars::CarWithBrand};
 use actix_web::web;
 use chrono::{DateTime, Utc};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
 use uuid::Uuid;
 
 #[derive(Serialize)]
@@ -21,41 +22,49 @@ struct Rental {
   canceled_at: Option<DateTime<Utc>>,
 }
 
-struct RentalWithCarAndBrandQuery {
-  id: Uuid,
-  created_at: DateTime<Utc>,
-  updated_at: DateTime<Utc>,
-  car_id: Uuid,
-  starts_at: DateTime<Utc>,
-  ends_at: DateTime<Utc>,
-  canceled_at: Option<DateTime<Utc>>,
+#[derive(Deserialize)]
+pub struct RentalsQueryParams {
+  car_id: Option<Uuid>,
+  starts_at: Option<DateTime<Utc>>,
+  ends_at: Option<DateTime<Utc>>,
+}
 
-  car_created_at: DateTime<Utc>,
-  car_updated_at: DateTime<Utc>,
-  car_brand_id: Uuid,
-  car_model: String,
-  car_horse_power: i32,
-  car_torque_in_lb: f32,
-  car_top_speed_in_km: i32,
-  car_acceleration_speed_in_km: f32,
-  car_weight_in_kg: i32,
-  car_rental_price_daily_in_usd: f64,
-  car_brand_created_at: DateTime<Utc>,
-  car_brand_updated_at: DateTime<Utc>,
-  car_brand_name: String,
+#[derive(FromRow)]
+pub struct RentalWithCarAndBrandQuery {
+  pub id: Uuid,
+  pub created_at: DateTime<Utc>,
+  pub updated_at: DateTime<Utc>,
+  pub car_id: Uuid,
+  pub starts_at: DateTime<Utc>,
+  pub ends_at: DateTime<Utc>,
+  pub canceled_at: Option<DateTime<Utc>>,
+
+  pub car_created_at: DateTime<Utc>,
+  pub car_updated_at: DateTime<Utc>,
+  pub car_brand_id: Uuid,
+  pub car_model: String,
+  pub car_horse_power: i32,
+  pub car_torque_in_lb: f32,
+  pub car_top_speed_in_km: i32,
+  pub car_acceleration_speed_in_km: f32,
+  pub car_weight_in_kg: i32,
+  pub car_rental_price_daily_in_usd: f64,
+  pub car_brand_created_at: DateTime<Utc>,
+  pub car_brand_updated_at: DateTime<Utc>,
+  pub car_brand_name: String,
 }
 
 #[derive(Serialize)]
-struct RentalWithCarAndBrand {
-  id: Uuid,
-  created_at: DateTime<Utc>,
-  updated_at: DateTime<Utc>,
-  car_id: Uuid,
-  starts_at: DateTime<Utc>,
-  ends_at: DateTime<Utc>,
-  canceled_at: Option<DateTime<Utc>>,
+pub struct RentalWithCarAndBrand {
+  pub id: Uuid,
+  pub created_at: DateTime<Utc>,
+  pub updated_at: DateTime<Utc>,
+  pub car_id: Uuid,
+  pub starts_at: DateTime<Utc>,
+  pub ends_at: DateTime<Utc>,
+  pub canceled_at: Option<DateTime<Utc>>,
 
-  car: CarWithBrand,
+  pub car: CarWithBrand,
 }
 
 impl From<RentalWithCarAndBrandQuery> for RentalWithCarAndBrand {
